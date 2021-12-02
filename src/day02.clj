@@ -2,6 +2,7 @@
   (:require [clojure.string :as string]
             [utils :as u]
             [aocd.core :as aocd]
+            [hashp.core]
             ))
 
 (def data
