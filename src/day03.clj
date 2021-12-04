@@ -19,21 +19,21 @@
 
 
 (defn calc-ones [data]
-  (reduce (fn [sofar next]
-            (map + sofar next)
-            )
-          (take (count (first data)) (repeat 0))data))
+(reduce (fn [sofar next]
+          (map + sofar next)
+          )
+        (take (count (first data)) (repeat 0))data))
 
 
 (defn calc-gamma [data]
-  (let [ones (calc-ones data)
-        l (count data)]
-    (map (fn [x] (if (>= x  (/ l 2)) 1 0)) ones)))
+(let [ones (calc-ones data)
+      l (count data)]
+  (map (fn [x] (if (>= x  (/ l 2)) 1 0)) ones)))
 
 (defn calc-epsilon [data]
-  (let [ones (calc-ones data)
-        l (count data)]
-    (map (fn [x] (if (>= x  (/ l 2)) 0 1)) ones)))
+(let [ones (calc-ones data)
+      l (count data)]
+  (map (fn [x] (if (>= x  (/ l 2)) 0 1)) ones)))
 
 
 (def gamma (calc-gamma data))
@@ -46,15 +46,16 @@
 (def part1-ans (* (binlist->dec gamma) (binlist->dec epsilon)))
 
 (defn calc-ox-co2 [ data calc-func]
-  (loop [pos 0
-         newdata data
-         ]
-    (let [key (calc-func newdata)
-          
-          ]
-      (if (or  (> pos (count (first newdata)))
-               (=  (count newdata) 1)) (first newdata)
-          (recur (inc  pos)    (filter (fn [x] (=  (nth x pos)  (nth key pos))) newdata))))))
+(loop [pos 0
+       newdata data
+       ]
+  (let [key (calc-func newdata)]
+    (if (or  (> pos (count (first newdata)))
+             (=  (count newdata) 1)) (first newdata)
+        (recur (inc  pos)
+               (filter (fn [x] (=  (nth x pos)  (nth key pos)))
+                       newdata))))))
 
 (def part2-ans (* (binlist->dec (calc-ox-co2 data calc-gamma))
                   (binlist->dec (calc-ox-co2 data calc-epsilon))))
+
