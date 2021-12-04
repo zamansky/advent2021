@@ -11,48 +11,36 @@
   (->> 
    ;;(slurp "data/sample04.dat")
    (aocd/input 2021 4)
-   string/split-lines
-   ;;(map u/parse-int)
-   
-   ))
+   string/split-lines))
 
 (def balls (->> data
-                (take 1)
                 first
-                (#(string/split % #","))
-                ;;(map u/parse-int)
-                ))
+                (#(string/split % #","))))
+
 
 (defn split-board [board]
   (->> board
-       (map #(string/split % #"[ \n]"))
+       (map #(string/split % #"[ \n]")) 
        (map (fn [x]  (filter #(not (= % ""))x )) )
-       (reduce concat)
-       ))
+       (reduce concat)))
 
 (def boards
   (->> data
        (drop 1)
        (partition 6)
        (map #(drop 1 %))
-       (map #(split-board %)))
-  )
+       (map #(split-board %))))
 
-(def b (first boards))
 
 (defn add-mark [board mark]
   (map #(if (= % mark) "X" %) board))
-;; (defn has-five? [board]
-;;   (map #(filter (fn [x] (= x "22"))%)  board))
 
 (defn has-five? [board]
   (>  (->> board
            (map #(filter (fn [x] (= x "X"))%)  )
            (map count)
            (filter #(= 5 % ))
-           count
-           )
-      0))
+           count) 0))
 
 
 
@@ -60,8 +48,7 @@
   (let [horiz (partition 5 board)
         vert  (apply mapv vector horiz)]
     (or  (has-five? horiz)
-         (has-five? vert))
-    ))
+         (has-five? vert))))
 
 (defn find-winner-part1 [balls boards]
   (loop [balls balls
@@ -86,7 +73,7 @@
 
 
 
-(defn find-winner-part2 [balls boards]
+(defn part2 [balls boards]
   (loop [balls balls
          boards boards]
     (let [ ball (first balls)
@@ -98,3 +85,5 @@
         ( recur (rest balls) n))
       )
     ))
+
+
