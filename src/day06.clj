@@ -17,20 +17,20 @@
    )
   )
 
-(def a [0 1 1 2 1 0 0 0 0])
 
-(def start
-  (reduce (fn [sofar next]
-            (update sofar next inc)
-            ) [0 0 0 0 0 0 0 0 0] data )
-  )
-(def ans (apply + (loop [i 0 gens start ]
-                    (if (= i 256)
-                      gens
-                      (let [last  (first  gens)
-                            gens  (assoc gens 7 (+ (nth gens 7) (first gens))) ;; 7 will become 6 after the drop 
-                            gens (conj gens last)
-                            gens (into [] (drop 1 gens))
-                            ]
-                        (recur (inc i)
-                               gens))))))
+
+(defn solve [data days]
+  (let [start-state (reduce (fn [sofar next] (update sofar next inc)) [0 0 0 0 0 0 0 0 0] data )]
+    (apply + (loop [i 0
+                    gens start-state]
+               (if (< i days)
+                 (let [last (first gens)
+                       gens  (into []  ( drop 1 gens))
+                       gens  (assoc gens 6 (+ (nth gens 6) last))
+                       gens  (conj gens last)
+                       ]
+                   (recur (inc i) gens)
+                   )
+                 gens
+                 )))))
+
