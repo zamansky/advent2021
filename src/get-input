@@ -1,7 +1,0 @@
-#!/bin/bash
-DAY="$1"
-SESSION="53616c7465645f5f184e08b43411ffee351f539adbaa2a52f957019cb61cc3b15e9dde2d8ff3a94dfb0fda5cb2d40d83"
-
-OUTPUT="../data/day$DAY.dat"
-
-curl -bsession=$SESSION https://adventofcode.com/2021/day/$DAY/input -o $OUTPUT
