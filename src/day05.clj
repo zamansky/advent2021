@@ -74,18 +74,17 @@
   (reduce (fn [sofar [x0 y0 x1 y1] ]
             (let [xs (sort [x0 x1])
                   ys (sort [y0 y1])]
-              
               (cond
                 (or (and (= x0 x1) (< (first ys) (second ys)))
                     (and (= y0 y1) (< (first xs) (second xs))))
                 (add-points sofar xs ys )
 
-                (:else 1
-                       (/ (- x1 x0) (- y1 y0)))
+                :else  ;; it's a diagonal
+                
                 (add-points-diagonal sofar [x0 y0] [x1 y1])
-                ;;:else
-                ;;sofar
-                )))
+                )
+
+              ))
           {} data
           ))
 (defn part2 [data]
