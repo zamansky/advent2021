@@ -33,17 +33,19 @@
     ans)
   )
 
-  (defn calc-cost [func data]
-    (let [start (apply min data) stop (apply max data)]
-      (apply min (loop [result []
-                        i start]
-                   (let [this-step  (map #(func i %) data)
-                         ans (apply + this-step)
-                         newans (conj result ans)]
-                     (if (= i stop)
-                       newans
-                       (recur newans (inc i)))
+(defn calc-cost [func data]
+  (let [start (apply min data) stop (apply max data)]
+    (apply min (loop [result []
+                      i start]
+                 (let [this-step  (map #(func i %) data)
+                       ans (apply + this-step)
+                       newans (conj result ans)]
+                   (if (= i stop)
+                     newans
+                     (recur newans (inc i)))
 
-                     )))))
+                   )))))
 
-  )
+)
+
+

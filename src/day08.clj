@@ -14,23 +14,27 @@
    (aocd/input 2021 8)
    (#(string/split % #"\n"))
    (map #(string/split % #" \| "))
-   (map (fn [ [a b] ] [(string/split a #" ") (string/split b #" ")])
-        )  ))
+   (map (fn [ [a b] ] [(string/split a #" ") (string/split b #" ")]))))
 
 (defn myfilter [x]
   (filter #(contains? #{2 4 3 7} %) x))
+
+;;------------------------------------------- Part 1 ---------------------------------------------
+
 (defn part1 [  data]
   (let [results (map second data)
         counted (map #(map count %) results)
         f (map #(myfilter %) counted)
         total (map #(count %) f)
         ]
-    (apply +  total)
-    ))
+    (apply +  total)))
 
 (part1 data)
 
+;;------------------------------------------- Part 2 ---------------------------------------------
 
+;; build a map where the keys are the digis and the entries are sets with the edges
+;; this does the 4 edges that we know because they each have a unique # of edges
 (defn build-map-1478 [[a b] mapsofar]
   (let [line (into a b)
         result (loop [result mapsofar
@@ -61,6 +65,7 @@
         ]
     result))
 
+;; build a map for the numbers that have 5 segments 
 (defn build-map-235 [[ a b ] mapsofar]
   (let [line (into a b)
         data (filter #(= (count %) 5) line)
@@ -88,7 +93,7 @@
     result
     ))
 
-
+;; build the numbers that have 6 segments 
 (defn build-map-069 [[ a b ] mapsofar]
   (let [line (into a b)
         data (filter #(= (count %) 6) line)
@@ -119,7 +124,7 @@
 
 
 
-
+;; build a dictionary with the keys being the digits and the entries the set for it's pattern
 (defn build-map [line]
   (->> {}
        (build-map-1478 line)
@@ -127,7 +132,9 @@
        (build-map-069 line)
        ))
 
-
+;; decode a single line by
+;; 1. invert the map so that we can look up by the edge set
+;; 2. get the digit for each item in the line 
 (defn decode [line]
   (let [key  (build-map line)
         datamap (set/map-invert key)
@@ -138,15 +145,17 @@
     (map #(get datamap (set %))  data)
     ))
 
-( def x (map decode data))
 
-
+;; convert a list of numbers to a number ex: (9 5 2 3) -> 9523
 (defn list->num [x]
   (reduce (fn [sofar next] (+  (* sofar  10 )0  next) ) x))
 
 
+;; put it all together:
+;; 1. for each line, build the map and decode it 
+;; 2. convert them to numbers
+;; 3. Add them up
+(defn part2 [data] (apply + (map list->num (map decode data ))))
 
-(apply + (map list->num (map decode data )))
-
-
+(part2 data )
 
