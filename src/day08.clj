@@ -19,7 +19,7 @@
 (defn myfilter [x]
   (filter #(contains? #{2 4 3 7} %) x))
 
-;;------------------------------------------- Part 1 ---------------------------------------------
+;;------------------ Part 1 --------------------------------------
 
 (defn part1 [  data]
   (let [results (map second data)
@@ -31,7 +31,7 @@
 
 (part1 data)
 
-;;------------------------------------------- Part 2 ---------------------------------------------
+;;-------------- Part 2 ----------------------------------
 
 ;; build a map where the keys are the digis and the entries are sets with the edges
 ;; this does the 4 edges that we know because they each have a unique # of edges
