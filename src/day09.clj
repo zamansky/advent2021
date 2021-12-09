@@ -10,7 +10,8 @@
 
 (def data
   (->> 
-   (slurp "data/sample09.dat")
+   ;;(slurp "data/sample09.dat")
+   (slurp "data/day09.dat")
    ;;(aocd/input 2021 9)
    (#(string/split % #"\n"))
    (map (fn [x] (map u/parse-int (string/split x #""))))
@@ -18,16 +19,33 @@
    (map-indexed (fn [j line]
                   (map (fn [[i k]] [j i k] ) line)
                   ) ) 
-   first
+   (reduce (fn [r n] (into r n)) [] )
    )
 
   )
 
-(def grid (reduce (fn [sofar [x y item]]
-                    (assoc sofar [x y] item))
+(def grid (reduce (fn [sofar [row col item]]
+                    (assoc sofar [row col] item))
                   {} data
                   ))
 
-(defn part1 [grid]
-  )
+(defn test-height [row col val]
+  (if (or
+       (> val (get grid [(inc row) col] val))
+       (> val (get grid [(dec row) col] val))
+       (> val (get grid [row (inc col)] val))
+       (> val (get grid [row (dec col)] val))
+       )
+    false
+    true
 
+    ))
+
+(defn part1 [grid]
+(reduce (fn [result [row col]]
+(if (test-height row col (get grid [row col]))
+(conj result [row col])
+result)) [] (keys grid)))
+
+(apply +(map inc(map #(get grid %) (part1 grid))))
+;; 1841 too high as is 1757
