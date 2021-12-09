@@ -31,11 +31,12 @@
 
 (defn test-height [row col val]
   (if (or
-       (> val (get grid [(inc row) col] val))
-       (> val (get grid [(dec row) col] val))
-       (> val (get grid [row (inc col)] val))
-       (> val (get grid [row (dec col)] val))
+       (>= val (get grid [(inc row) col] (inc val)))
+       (>= val (get grid [(dec row) col] (inc val)))
+       (>= val (get grid [row (inc col)] (inc val)))
+       (>= val (get grid [row (dec col)] (inc val)))
        )
+
     false
     true
 
@@ -44,8 +45,10 @@
 (defn part1 [grid]
 (reduce (fn [result [row col]]
 (if (test-height row col (get grid [row col]))
-(conj result [row col])
-result)) [] (keys grid)))
+(conj result  [row col])
+result
+)) [] (keys grid)))
 
-(apply +(map inc(map #(get grid %) (part1 grid))))
+(apply + (map inc (map #(get grid %) (part1 grid))))
+(count  (map #(get grid %) (part1 grid)))
 ;; 1841 too high as is 1757
