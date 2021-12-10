@@ -10,16 +10,17 @@
 
 (def data
   (->> 
-   ;;(slurp "data/sample08.dat")
-   (aocd/input 2021 8)
+   (slurp "data/sample08.dat")
+   ;;(aocd/input 2021 8)
    (#(string/split % #"\n"))
    (map #(string/split % #" \| "))
    (map (fn [ [a b] ] [(string/split a #" ") (string/split b #" ")]))))
 
+;;------------------ Part 1 --------------------------------------
+
 (defn myfilter [x]
   (filter #(contains? #{2 4 3 7} %) x))
 
-;;------------------ Part 1 --------------------------------------
 
 (defn part1 [  data]
   (let [results (map second data)

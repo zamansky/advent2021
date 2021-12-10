@@ -11,9 +11,12 @@
 (def data
   (->> 
    ;;(slurp "data/sample09.dat")
-   (slurp "data/day09.dat")
-   ;;(aocd/input 2021 9)
+   ;;(slurp "data/day09.dat")
+   (aocd/input 2021 9)
    (#(string/split % #"\n"))
+
+
+
    (map (fn [x] (map u/parse-int (string/split x #""))))
    (map  #(map-indexed (fn [i item] [i item]) %))
    (map-indexed (fn [j line]
@@ -43,12 +46,51 @@
     ))
 
 (defn part1 [grid]
-(reduce (fn [result [row col]]
-(if (test-height row col (get grid [row col]))
-(conj result  [row col])
-result
-)) [] (keys grid)))
+  (reduce (fn [result [row col]]
+            (if (test-height row col (get grid [row col]))
+              (conj result  [row col])
+              result
+              )) [] (keys grid)))
 
 (apply + (map inc (map #(get grid %) (part1 grid))))
 (count  (map #(get grid %) (part1 grid)))
 ;; 1841 too high as is 1757
+
+(def basin-points (part1 grid))
+
+(defn find-neighbors [[row col] grid ]
+  
+  (let [val (get grid[row col] 9 )
+        candidates [[(inc row) col]
+                    [(dec row) col]
+                    [row (inc col)]
+                    [row (dec col)]    
+                    ]
+        final-candidates (filter #(let [v (get grid %  9)]
+                                    (and
+                                     (< v 9)
+                                     (<  val v  )) ) candidates)
+        ]
+    final-candidates
+    ))
+
+(defn find-basin-size [[row col] grid]
+  (loop [fronteir [[row col]]
+         solution #{}
+         grid grid 
+         ]
+    (let [current  (first fronteir)
+          solution (into solution #{current})
+          neighbors (find-neighbors current grid)
+          neighbors (filter #(not (contains? solution %)) neighbors)
+          fronteir (into (rest fronteir) neighbors)
+          ]
+      (cond
+        (empty? fronteir)  solution
+        :else (recur fronteir solution grid)
+        ))))
+
+
+(defn part2 [basin-points]
+  (apply * (take 3 (reverse  (sort (map count (map #(find-basin-size % grid) basin-points)))))))
+;; 1075536
