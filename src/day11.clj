@@ -88,9 +88,8 @@
 
 
 (defn part2-test [board]
-  (let [val (get board [0 0])
-        cellcount  (count board)
-        filtered (filter (fn [ [a b]] (= b val))board)
+  (let [cellcount  (count board)
+        filtered (filter (fn [ [a b]] (= b 0))board)
         filtercount (count filtered)
         ]
     (= filtercount cellcount)
