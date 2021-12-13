@@ -6,20 +6,6 @@
             [clojure.math.numeric-tower :as math]
             [clojure.string :as str]
             [clojure.set :as set]))
-(def data
-  (->> 
-   ;;(slurp "data/sample13.dat")
-   (aocd/input 2021 13)
-   ( #(string/split % #"\n\n"))
-   ))
-
-(def coords (->> (first data)
-                 string/split-lines
-                 (map #(string/split % #","))
-
-                 (map (fn [x] (map #(u/parse-int %) x)))
-                 
-                 ))
 
 (defn board->string [board]
   (let [maxx (apply max (map first (keys board)))
@@ -81,6 +67,20 @@
   (reduce (fn [b c] (assoc b c \#)) {} coords))
 (def board (coords->board coords))
 
+(def data
+  (->> 
+   ;;(slurp "data/sample13.dat")
+   (aocd/input 2021 13)
+   ( #(string/split % #"\n\n"))
+   ))
+
+(def coords (->> (first data)
+                 string/split-lines
+                 (map #(string/split % #","))
+
+                 (map (fn [x] (map #(u/parse-int %) x)))
+                 
+                 ))
 
 (def folds (string/split-lines (second data)))
 
@@ -91,3 +91,5 @@
 (defn part2 [board folds]
   (board->string
    (reduce (fn [b f] (fold b f)) board folds)))
+
+(part2 board folds) 
