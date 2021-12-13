@@ -8,7 +8,7 @@
             [clojure.set :as set]))
 (def data
   (->> 
-   (slurp "data/sample13.dat")
+   (slurp "data/day13.dat")
    ;;(aocd/input 2021 13)
    ( #(string/split % #"\n\n"))
    ))
