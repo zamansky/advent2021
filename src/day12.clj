@@ -72,25 +72,38 @@
     (=  current "end")  (do
                           (swap! count inc)
                           solset)
+    (and (not (empty solset)) (= current "start"))
+    solset
+    
 
-    :else (let [raw-neighbors (into [] (get graph current))
-                neighbors   (filter #(not (contains?  used %))  raw-neighbors)
-                ;;neighbors   (filter #(not (= "start" %))  neighbors)
-                solset (into solset current)
-                used (if (= current "start")
-                       (set/union used #{"start"})
-                       used)
-                used (cond  (and  (true? twice)
-                                  (= current (string/lower-case current)))
+    :else (let [
+                
+                raw-neighbors (into [] (get graph current))
+                neighbors   (filter #(not (= "start" %))  raw-neighbors)
+                neighbors   (filter #(not (contains?  used %))  neighbors)
+
+
+
+
+
+                twice (if (and
+                           (not (= current "start"))
+                           (contains? solset current)
+                           (= (string/lower-case current) current))
+                        true
+                        twice
+                        )
+                
+                used (cond  (and  twice
+                                  (= current (string/lower-case current))
+                                  )
                             (set/union used #{current})
                             :else
                             used
                             )
+                
+                solset (into solset #{current})
 
-                twice (if  (and (not (= current "start"))
-                                (or  twice
-                                     (= current (string/lower-case current))))
-                        true)
                 ]
             (loop [cn (first neighbors) neighbors neighbors
                    solset solset
