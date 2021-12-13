@@ -8,8 +8,8 @@
             [clojure.set :as set]))
 (def data
   (->> 
-   (slurp "data/day13.dat")
-   ;;(aocd/input 2021 13)
+   ;;(slurp "data/sample13.dat")
+   (aocd/input 2021 13)
    ( #(string/split % #"\n\n"))
    ))
 
@@ -27,7 +27,7 @@
         maxy (apply max (map second (keys board)))
         miny (apply min (map second (keys board)))
         k (keys board)
-        grid (into [] (repeat (inc maxy) (into [] (repeat (inc maxx) \.))))
+        grid (into [] (repeat (inc maxy) (into [] (repeat (inc maxx) \ ))))
         filled-grid (reduce (fn [b [y x]] (assoc-in b [x y] \#)) grid k)
         string-grid (map #(apply str %) filled-grid)
         ]
@@ -89,4 +89,5 @@
     (count (keys newboard))))
 
 (defn part2 [board folds]
-  (reduce (fn [b f] (fold b f)) board folds))
+  (board->string
+   (reduce (fn [b f] (fold b f)) board folds)))
