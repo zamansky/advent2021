@@ -55,6 +55,7 @@
           [x
            (- y (* 2 (u/abs (- y amt))))
            ]
+          
           :else
           [(- x (* 2 (u/abs (- x amt))))
            y]
@@ -76,7 +77,11 @@
             board k)
     ))
 
+(defn coords->board [coords]
+  (reduce (fn [b c] (assoc b c \#)) {} coords))
 (def board (coords->board coords))
+
+
 (def folds (string/split-lines (second data)))
 
 (defn part1 [board folds]
@@ -84,4 +89,4 @@
     (count (keys newboard))))
 
 (defn part2 [board folds]
-  (reduce (fn [b f] (fold board f)) board folds))
+  (reduce (fn [b f] (fold b f)) board folds))
